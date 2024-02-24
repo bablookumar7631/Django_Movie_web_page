@@ -1,0 +1,80 @@
+{% extends 'basic.html' %}
+{% load static %}
+
+{% block body %}
+<div class="carousel-container">
+  <div class="carousel_items">
+    <div class="carousel_item item1">
+      <img class="index_banner_img" src="{% static 'images/img_1.webp' %}" alt="">
+      <p class="carousel_text">Image 1</p>
+    </div>
+    <div class="carousel_item item2">
+      <img class="index_banner_img" src="{% static 'images/img_2.webp' %}" alt="">
+      <p class="carousel_text">Image 2</p>
+    </div>
+    <div class="carousel_item item3">
+      <img class="index_banner_img" src="{% static 'images/img_3.webp' %}" alt="">
+      <p class="carousel_text">Image 3</p>
+    </div>
+    <div class="carousel_item item4">
+      <img class="index_banner_img" src="{% static 'images/img_4.webp' %}" alt="">
+      <p class="carousel_text">Image 4</p>
+    </div>
+    <div class="carousel_item item5">
+      <img class="index_banner_img" src="{% static 'images/img_5.webp' %}" alt="">
+      <p class="carousel_text">Image 5</p>
+    </div>
+  </div>
+</div>
+
+
+<div class="section">
+    <div class="inner-section-1">
+      <h2 style="color: black;">Create Account</h2>
+      <p style="color: black;">Sign up foe an account in order to add a review to your favorite movie</p>
+      <button type="submit" class="sec-btn"><a href="{% url 'signup' %}">SIGNUP</a></button>
+    </div>
+
+    <div class="inner-section-1">
+      <h2 style="color: black;">Movies List</h2>
+      <p style="color: black;">Browse our extensive list of movie along with ratings, years, a short synopsis and even review!</p>
+      <button type="submit" class="sec-btn"><a href="{% url 'moviesList' %}">View Movies</a></button>
+    </div>
+
+    <div class="inner-section-1">
+      <h2 style="color: black;">Reviews List</h2>
+      <p style="color: black;">Browse all of our reviews and find out more about what others thought of your favorite movies!</p>
+      <button type="submit" class="sec-btn"><a href="{% url 'reviews' %}">View Reviews</a></button>
+    </div>
+</div>
+
+{% endblock body %}
+
+{% block js %}
+<script>
+
+const carouselItems = document.querySelectorAll(".carousel_item");
+let i = 1;
+
+setInterval(() => {
+  // Accessing All the carousel Items
+  Array.from(carouselItems).forEach((item, index) => {
+    if (i < carouselItems.length) {
+      item.style.transition = "transform 0.5s"; // Add smooth transition
+      item.style.transform = `translateX(-${i * 100}%)`;
+    } else {
+      // Reset the transform for the last item
+      item.style.transition = "none"; // Remove transition
+      item.style.transform = `translateX(0)`;
+    }
+  });
+
+  if (i < carouselItems.length) {
+    i++;
+  } else {
+    i = 0;
+  }
+}, 3000);
+
+</script>
+{% endblock %}

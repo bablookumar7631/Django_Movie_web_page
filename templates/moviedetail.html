@@ -1,0 +1,183 @@
+{% extends 'basic.html' %}
+{% load static %}
+
+{% block body %}
+
+
+<div class="moviedetail">
+    <div class="moviedetail-inner">
+        <div class="moviedatail-under">
+
+            <p class="movie-name"> {{data.movie_name}}</p>
+
+            <img class="picture-head" src="/media/{{data.movie_image}}" alt="">
+
+            <div class="info">
+            <h2 class="info-1">Movie Info:</h2>
+            <ul class="desp">
+                <li><span>Full Name:</span> {{data.Full_name}}</li>
+                <li><span>Language:</span> {{data.language}}</li>
+                <li><span>Release Year:</span> {{data.release_year}}</li>
+                <li><span>Quality:</span> {{data.quality}}</li>
+                <li><span>Pixel:</span> {{data.pixel}}</li>
+                <li><span>Size:</span> {{data.size}}</li>
+                <li><span>Stars:</span> {{data.stars_name}}</li>
+                <li><span>Director:</span> {{data.director}}</li>
+            </ul>
+            </div>
+
+
+            <h2 class="info-1">Storyline:</h2>
+            <p class="desp"><b>{{data.storyline}}</b></p>
+
+
+            <h2 class="info-1">ScreenShots:</h2>
+            <div class="scrshot">
+            {% for screenshot in screenshots %}
+            <img class="picture" src="/media/{{screenshot.scr_image}}" alt="">
+            {% endfor %}
+        </div>
+
+            <div class="downl">
+            <h3>{{data.links_name_1}}</h3>
+            <button class="downlink"><a href="{{data.links_down_1}}">Download Link</a></button>
+            </div>
+
+            <div class="downl">
+            <h3>{{data.links_name_2}}</h3>
+            <button class="downlink"><a href="{{data.links_down_2}}">Download Link</a></button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- comment form ------------------------------------------- -->
+<div class="comment">
+    <div class="inner-comment">
+        <p class="commnt_name">Comments : <a href="{% url 'reviews' %}"><span>click me for rating MovieVerse website</span></a></p>
+
+      <div class="comt">
+        <p class="punchline">“Feedback is a gift. Ideas are the currency of our next success. Let people see you value both feedback and ideas.”</p>
+
+        <form id="feed-inner" method="post" action="{% url 'postComment' allmovie_id=data.movie_id %}">{% csrf_token %}
+            <label for="com_msg">Description:</label>
+            <textarea id="com_msg" name="com_msg" rows="5" cols="43" placeholder="Please enter your own words"></textarea>
+
+            <input type="hidden" name="movieid" value="{{movie.movie_id}}">
+    
+            <div class="rating">
+                <input type="radio" id="star5" name="rating" value="5">
+                <label for="star5"></label>
+                <input type="radio" id="star4" name="rating" value="4">
+                <label for="star4"></label>
+                <input type="radio" id="star3" name="rating" value="3">
+                <label for="star3"></label>
+                <input type="radio" id="star2" name="rating" value="2">
+                <label for="star2"></label>
+                <input type="radio" id="star1" name="rating" value="1">
+                <label for="star1"></label>
+            </div>
+    
+            <button id="feed-btn" type="submit">Submit</button>
+        </form>
+      </div>
+
+      <!-- given bu user comment --------------------------------------------------->
+        
+        {% for comment in movie_comments %}
+        <div class="under-comment">
+            <input type="hidden" class="comment_id" name="comment_id" value="{{comment.id}}">
+            <p class="customer_name">{{ comment.commentor.username }}</p>
+            <p class="star_mark"> <span class="comment_rating">{{ comment.rating }}</span> &#9733<span>{{ comment.date_added }}</span></p>
+            <p class="comnt_desc">{{ comment.com_msg }}</p>
+
+            <div class="en_btn">
+                <button class="edit_btn"><a href="/edit-comment/{{comment.id}}" class="edit_btn_a">Edit</a></button>
+                <form action="{% url 'deletedata' comment.pk %}" method="post">{% csrf_token %}
+                    <input type="submit" class="delete_btn" value="Delete">
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- update/Edit form -->
+
+<div class="update">
+    <div class="inner_update">
+        <h2 class="upd-comnt">Update your comment</h2>
+        <form id="feed-inner" method="post" action="{% url 'update_comment' %}">{% csrf_token %}
+            <input type="hidden" id="comment_id" name="comment_id">
+            <label for="com_msg">Description:</label>
+            <textarea id="popup_comment"  class="com_msg" name="com_msg" rows="5" cols="43" placeholder="Please enter your own words">{{ comment.com_msg }}</textarea>
+    
+            <div class="star-rating">
+
+                <input type="hidden" name="rating" id="rating" value="">
+              
+                <input type="radio" name="rating" id="star-5" class="star_edit" value="5">
+                <label for="star-5"></label>
+                <input type="radio" name="rating" id="star-4" class="star_edit" value="4">
+                <label for="star-4"></label>
+                <input type="radio" name="rating" id="star-3" class="star_edit" value="3">
+                <label for="star-3"></label>
+                <input type="radio" name="rating" id="star-2" class="star_edit" value="2">
+                <label for="star-2"></label>
+                <input type="radio" name="rating" id="star-1" class="star_edit" value="1">
+                <label for="star-1"></label>
+              
+            </div>
+              
+    
+            <button id="popup-submit" class="close" type="submit">Update</button>
+        </form>
+    </div>
+</div>
+
+
+{% endblock body %}
+
+{% block js %}
+<script>
+    var currentId;
+    $("body").on("click", ".edit_btn a" , function popupWindow(ev) {
+        ev.preventDefault(); 
+        var update = $(".update")[0]
+        update.style.display = "flex";
+        var cmnt_id = $(this).closest(".under-comment").find(".comment_id").val()
+        var comment = $(this).closest(".under-comment").find(".comnt_desc").text()
+        var comment_rating = $(this).closest(".under-comment").find(".comment_rating").html()
+        $('.star_edit[value='+comment_rating+']').click()
+        $("#comment_id").val(cmnt_id);
+        $("#popup_comment").val(comment);
+        updateCurrentLink(cmnt_id)
+        
+        
+    });
+    function updateCurrentLink(cmnt_id) {
+        currentId=cmnt_id
+    }
+    
+    $("body").on("click", ".close" , function(ev){
+        ev.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: $(".update form").attr("action"),
+            data: $(".update form").serialize(),
+            success: function (returnedData) {
+                $(".update")[0].style.display = "none";
+                $('input[value='+ currentId +']').closest(".under-comment").find(".comnt_desc").text(returnedData['updatedComment'])
+                $('input[value='+ currentId +']').closest(".under-comment").find(".comment_rating").html(returnedData['updatedRating'])
+            },
+            error: function (xhr, error) {
+                alert("Error:", error);
+            },
+            dataType: "json"
+        });
+
+    })
+  
+</script>
+{% endblock js %}

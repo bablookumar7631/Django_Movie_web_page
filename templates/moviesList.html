@@ -1,0 +1,91 @@
+{% extends 'basic.html' %}
+{% load static %}
+
+{% block body %}
+<form method="get">
+  <div class="lout">
+    <input type="text" id="search-input" name="moviename" placeholder="What are you looking for?">
+    <button type="submit" id="search-button">Search</button>
+  </div>
+</form>
+
+
+{% for id,name in Categories.items %}
+<div class="wrapper">
+  <p class="movie-categ">{{name}}</p>
+  <!-- {{ movie.category }} -->
+  <div class="carousel">
+    <div class="content">
+      {% for movie in Movies %}
+      {% if movie.category_id == id %}
+      <div class="inner-content">
+  
+        <img class="item" src="media/{{movie.movie_image}}" alt="movie_picture" />
+
+        <p class="itm"><a href="{% url 'moviedetail' movie.movie_id %}">{{movie.movie_name|slice:"0:70"}}....</a></p>
+
+      </div>
+      
+
+      {% endif %}
+
+      {% empty %}
+      No Data Found
+
+      {% endfor %}
+
+    </div>
+  </div>
+  <button class="psc arrow-btn">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+      <path fill="none" d="M0 0h24v24H0V0z" />
+      <path fill="white" d="M15.61 7.41L14.2 6l-6 6 6 6 1.41-1.41L11.03 12l4.58-4.59z" />
+    </svg>
+  </button>
+  <button class="nsc arrow-btn">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+      <path fill="none" d="M0 0h24v24H0V0z" />
+      <path fill="white" d="M10.02 6L8.61 7.41 13.19 12l-4.58 4.59L10.02 18l6-6-6-6z" />
+    </svg>
+  </button>
+</div>
+{% endfor %}
+
+{% endblock body %}
+
+
+{% block js %}
+
+<script>
+const gap = 16;
+  let width = $(".carousel").width();
+
+  $(".nsc, .psc").click(function () {
+    const carouselWrapper = $(this).closest(".wrapper");
+    const carousel = carouselWrapper.find(".carousel");
+    const content = carousel.find(".content");
+    const prevButton = carouselWrapper.find(".psc");
+    const nextButton = carouselWrapper.find(".nsc");
+
+    if ($(this).hasClass("nsc")) {
+      carousel.animate({ scrollLeft: `+=${width + gap}` }, 50);
+      prevButton.css("display", "flex");
+      if (content[0].scrollWidth - width - gap <= carousel[0].scrollLeft + width) {
+        nextButton.hide();
+      }
+    } else {
+      carousel.animate({ scrollLeft: `-=${width + gap}` }, 50);
+      nextButton.css("display", "flex");
+      if (carousel[0].scrollLeft <= 0) {
+        prevButton.hide();
+      }
+    }
+
+    return false;
+  });
+
+  $(window).on("resize", () => (width = $(".carousel").width()));
+  
+</script>
+
+{% endblock js %}

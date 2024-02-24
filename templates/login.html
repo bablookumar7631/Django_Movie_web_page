@@ -1,0 +1,19 @@
+{% extends 'basic.html' %}
+
+{% block body %}
+
+<section class="log">
+    <div class="login">
+        <h1 class="head">Login Here</h1>
+        <form class="detail-log" action="" method="post">{% csrf_token %}
+            <input type="text" id="Username" name="Username" placeholder="Username">
+
+            <input type="password" id="Password" name="Password" placeholder="Password">
+
+            <button class="btn-login" type="submit" value="Login">Login</button>
+            <a class="create" href="{% url 'signup' %}">Create a account?</a>
+        </form>
+    </div>
+</section>
+
+{% endblock body %}
