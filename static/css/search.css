@@ -1,0 +1,20 @@
+/* search page css */
+.search_section{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+    margin-bottom: 3rem;
+  }
+  .all-movie-card{
+    display: flex;
+    gap: 1rem;
+  }
+  footer{
+    display: none;
+  }
+
+  .search_section_head{
+    margin-bottom: 2rem;
+  }

@@ -2,12 +2,13 @@
 {% load static %}
 
 {% block body %}
-<form method="get">
+<form method="POST" action="{% url 'search' %}">{% csrf_token %}
   <div class="lout">
-    <input type="text" id="search-input" name="moviename" placeholder="What are you looking for?">
+    <input type="search" id="search-input" name="searched" placeholder="What are you looking for?">
     <button type="submit" id="search-button">Search</button>
   </div>
 </form>
+
 
 
 {% for id,name in Categories.items %}

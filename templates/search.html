@@ -1,0 +1,32 @@
+{% extends 'basic.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/search.css' %}">
+{% endblock %}
+
+{% block body %}
+
+<div>
+    <div class="search_section">
+        {% if searched %}
+            <h1 class="search_section_head">You searched For {{searched}}</h1>
+            <div class="all-movie-card">
+                {% for movie in result %}
+                    <div class="inner-content">
+  
+                        <img class="item" src="media/{{movie.movie_image}}" alt="movie_picture" />
+            
+                        <p class="itm"><a href="{% url 'moviedetail' movie.movie_id %}">{{movie.movie_name|slice:"0:70"}}....</a></p>
+                    </div>            
+                {% empty %}
+                    <h2 class="sorry_line">Sorry , Your Search Did Not Match Any Movies.</h2>
+                {% endfor %} 
+            </div>
+        {% else %}
+            <h1 class="key_provide">Kindly provide a keyword to search.</h1>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock body %}

@@ -40,6 +40,7 @@ urlpatterns = [
     path('moviedetail/<int:id>', views.MovieDetailPage,name='moviedetail'),
     path('reviews', views.ReviewPage,name='reviews'),
     path('logout', views.LogoutPage,name='logout'),
+    path('search', views.searchPage, name='search'),
 
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

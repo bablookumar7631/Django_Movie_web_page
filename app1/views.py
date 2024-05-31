@@ -73,9 +73,7 @@ def  MoviesList(request):
 @login_required(login_url='index')
 def MovieDetailPage(request,id):
     data=Allmovie.objects.get(movie_id=id)
-    print(data)
     screenshots = Screenshot.objects.filter(movie_id=id)
-    print(screenshots)
     movie_comments = MovieComment.objects.filter(allmovies_id=id)
 
     return render(request,'moviedetail.html',{'data':data, 'screenshots' : screenshots, 'movie_comments': movie_comments})
@@ -167,3 +165,13 @@ def save_feedback(request):
             
         svf.save()
     return render(request, 'reviews.html')
+
+
+# search for movie .....................
+def  searchPage(request):
+    if request.method == "POST":
+        searched = request.POST['searched']
+        result = Allmovie.objects.filter(movie_name__icontains=searched)
+        return render(request,'search.html',{'searched':searched, 'result':result})
+    else:
+        return render(request,'moviesList.html')
