@@ -10,7 +10,7 @@ from .models import*
 from django import template
 register = template.Library()
 from django.views import View
-
+from django.db.models import Avg
 
 
 # Create your views here
@@ -75,8 +75,11 @@ def MovieDetailPage(request,id):
     data=Allmovie.objects.get(movie_id=id)
     screenshots = Screenshot.objects.filter(movie_id=id)
     movie_comments = MovieComment.objects.filter(allmovies_id=id)
+    average_rating = movie_comments.aggregate(Avg('rating'))['rating__avg']
+    if average_rating is not None:
+        average_rating = round(average_rating, 1)
 
-    return render(request,'moviedetail.html',{'data':data, 'screenshots' : screenshots, 'movie_comments': movie_comments})
+    return render(request,'moviedetail.html',{'data':data, 'screenshots' : screenshots, 'movie_comments': movie_comments, 'average_rating': average_rating})
 
 
 def postComment(request, allmovie_id):

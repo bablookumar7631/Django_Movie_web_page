@@ -24,7 +24,6 @@ admin.site.site_title = "MovieVerse Admin Panel"
 admin.site.index_title = "Welcome to MovieVerse Admin Panel"
 
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('postComment/<int:allmovie_id>/', views.postComment, name="postComment"),
